@@ -1,0 +1,11 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Sekrety
+.env
+
+# Lokalna baza prototypu
+prototype/budzet.db
