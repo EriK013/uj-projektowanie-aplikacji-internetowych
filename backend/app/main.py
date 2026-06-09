@@ -7,7 +7,7 @@ from sqlalchemy.orm import Session
 from app import models
 from app.config import CORS_ORIGINS
 from app.database.session import get_db
-from app.routers import auth, categories
+from app.routers import auth, categories, envelopes, months
 
 app = FastAPI(title="BudzetApp API")
 
@@ -21,6 +21,8 @@ app.add_middleware(
 
 app.include_router(auth.router)
 app.include_router(categories.router)
+app.include_router(months.router)
+app.include_router(envelopes.router)
 
 
 @app.get("/health")
