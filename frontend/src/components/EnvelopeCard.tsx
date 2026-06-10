@@ -1,7 +1,13 @@
 import type { SummaryEnvelope } from "../api/months";
 import { pln } from "../format";
 
-export default function EnvelopeCard({ envelope }: { envelope: SummaryEnvelope }) {
+type Props = {
+  envelope: SummaryEnvelope;
+  onEdit: () => void;
+  onDelete: () => void;
+};
+
+export default function EnvelopeCard({ envelope, onEdit, onDelete }: Props) {
   const przekroczone = envelope.pct > 100;
   const szerokosc = Math.min(envelope.pct, 100);
 
@@ -44,6 +50,15 @@ export default function EnvelopeCard({ envelope }: { envelope: SummaryEnvelope }
         <span style={{ color: Number(envelope.remaining) < 0 ? "#c0392b" : "#555" }}>
           zostalo {pln(envelope.remaining)}
         </span>
+      </div>
+
+      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
+        <button type="button" onClick={onEdit} style={{ fontSize: "0.8rem", padding: "0.25rem 0.5rem" }}>
+          Edytuj
+        </button>
+        <button type="button" onClick={onDelete} style={{ fontSize: "0.8rem", padding: "0.25rem 0.5rem" }}>
+          Usun
+        </button>
       </div>
     </div>
   );

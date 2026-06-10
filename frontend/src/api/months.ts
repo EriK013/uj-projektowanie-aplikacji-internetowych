@@ -2,7 +2,7 @@ import { request } from "./client";
 
 export type Month = {
   id: number;
-  period: string; // MM-RRRR
+  period: string;
   label: string;
   opening_balance: string;
 };
