@@ -89,82 +89,88 @@ export default function Home() {
   const availableCategories = categories.filter((c) => !usedCategoryNames.has(c.name));
 
   return (
-    <main style={{ maxWidth: 900, margin: "2rem auto", padding: "0 1rem" }}>
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h1>BudzetApp</h1>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <span style={{ color: "#777", fontSize: "0.9rem" }}>{user?.email}</span>
-          <button onClick={logout}>Wyloguj</button>
+    <>
+      <header className="topbar">
+        <h1 className="logo">
+          budzet<span>/</span>app
+        </h1>
+        <div className="user">
+          <span className="muted">{user?.email}</span>
+          <button onClick={logout}>wyloguj</button>
         </div>
       </header>
 
-      {error && <p style={{ color: "#c0392b", marginTop: "1rem" }}>{error}</p>}
+      {summary && <TotalsBar totals={summary.totals} />}
 
-      <div style={{ display: "flex", gap: "0.75rem", alignItems: "center", margin: "1.5rem 0" }}>
-        <label>
-          Miesiac:{" "}
-          <select
-            value={selectedId ?? ""}
-            onChange={(e) => selectMonth(Number(e.target.value))}
-            disabled={months.length === 0}
-          >
+      <main className="content">
+        {error && <p className="error" style={{ margin: "1rem 0" }}>{error}</p>}
+
+        <div className="okres">
+          <span className="label">Okres</span>
+          <div className="tabs">
             {months.map((m) => (
-              <option key={m.id} value={m.id}>
+              <button
+                key={m.id}
+                className={m.id === selectedId ? "active" : ""}
+                onClick={() => selectMonth(m.id)}
+              >
                 {m.label}
-              </option>
+              </button>
             ))}
-          </select>
-        </label>
-        <NewMonthForm onCreated={handleMonthCreated} />
-        <CategoryManager categories={categories} onChanged={refreshCategories} />
-      </div>
+          </div>
+          <NewMonthForm onCreated={handleMonthCreated} />
+          <CategoryManager categories={categories} onChanged={refreshCategories} />
+          <span className="spacer" />
+          {summary && form.mode !== "add" && (
+            <button
+              className="primary"
+              onClick={() => setForm({ mode: "add" })}
+              disabled={availableCategories.length === 0}
+              title={availableCategories.length === 0 ? "Brak wolnych kategorii" : undefined}
+            >
+              + nowa koperta
+            </button>
+          )}
+        </div>
 
-      {months.length === 0 && (
-        <p style={{ color: "#777" }}>Brak miesiecy. Dodaj pierwszy, aby zaczac planowanie.</p>
-      )}
+        {months.length === 0 && (
+          <p className="muted">Brak miesiecy. Dodaj pierwszy, aby zaczac planowanie.</p>
+        )}
 
-      {summary && (
-        <>
-          <TotalsBar totals={summary.totals} />
-
-          <div style={{ marginTop: "1.5rem" }}>
-            {form.mode === "add" ? (
+        {summary && (
+          <>
+            {form.mode === "add" && (
               <EnvelopeForm
                 monthId={summary.month.id}
                 categories={availableCategories}
                 onSaved={handleSaved}
                 onCancel={() => setForm({ mode: "none" })}
               />
-            ) : (
-              <button onClick={() => setForm({ mode: "add" })} disabled={availableCategories.length === 0}>
-                + Nowa koperta
-              </button>
             )}
-            {form.mode === "add" && availableCategories.length === 0 && (
-              <p style={{ color: "#777", fontSize: "0.85rem" }}>Brak wolnych kategorii.</p>
-            )}
-          </div>
 
-          <div style={{ display: "flex", gap: "1.5rem", marginTop: "1.5rem", flexWrap: "wrap" }}>
-            <section style={{ flex: 1, minWidth: 280 }}>
-              <h2 style={{ fontSize: "1.1rem", marginBottom: "0.75rem" }}>Przychody</h2>
-              <div style={{ display: "grid", gap: "0.5rem" }}>
-                {income.length === 0 && <p style={{ color: "#777" }}>Brak kopert przychodow.</p>}
+            <div className="panel">
+              <section>
+                <div className="col-head">
+                  <span className="label">Przychody</span>
+                  <span className="muted">{sumuj(income)}</span>
+                </div>
+                {income.length === 0 && <p className="muted">Brak kopert przychodow.</p>}
                 {income.map((e) => renderEnvelope(e))}
-              </div>
-            </section>
+              </section>
 
-            <section style={{ flex: 1, minWidth: 280 }}>
-              <h2 style={{ fontSize: "1.1rem", marginBottom: "0.75rem" }}>Wydatki</h2>
-              <div style={{ display: "grid", gap: "0.5rem" }}>
-                {expense.length === 0 && <p style={{ color: "#777" }}>Brak kopert wydatkow.</p>}
+              <section>
+                <div className="col-head">
+                  <span className="label">Wydatki</span>
+                  <span className="muted">{sumuj(expense)}</span>
+                </div>
+                {expense.length === 0 && <p className="muted">Brak kopert wydatkow.</p>}
                 {expense.map((e) => renderEnvelope(e))}
-              </div>
-            </section>
-          </div>
-        </>
-      )}
-    </main>
+              </section>
+            </div>
+          </>
+        )}
+      </main>
+    </>
   );
 
   function renderEnvelope(e: SummaryEnvelope) {
@@ -189,4 +195,10 @@ export default function Home() {
       />
     );
   }
+}
+
+function sumuj(list: SummaryEnvelope[]): string {
+  const spent = list.reduce((acc, e) => acc + Number(e.spent), 0);
+  const planned = list.reduce((acc, e) => acc + Number(e.planned), 0);
+  return `${spent.toLocaleString("pl-PL")} / ${planned.toLocaleString("pl-PL")}`;
 }

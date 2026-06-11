@@ -45,35 +45,30 @@ export default function CategoryManager({ categories, onChanged }: Props) {
   }
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid #aaa",
-        borderRadius: 8,
-        padding: "1rem",
-        marginTop: "1rem",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <h2 style={{ fontSize: "1.1rem" }}>Kategorie</h2>
-        <button onClick={() => setOpen(false)}>Zamknij</button>
+    <div className="box">
+      <div className="box-head">
+        <span className="label">Kategorie</span>
+        <button className="small" onClick={() => setOpen(false)}>
+          zamknij
+        </button>
       </div>
 
-      <ul style={{ listStyle: "none", padding: 0, margin: "0.75rem 0", display: "grid", gap: "0.25rem" }}>
-        {categories.length === 0 && <li style={{ color: "#777" }}>Brak kategorii.</li>}
+      <ul className="cat-list">
+        {categories.length === 0 && <li className="muted">Brak kategorii.</li>}
         {categories.map((c) => (
-          <li key={c.id} style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <li key={c.id}>
             <span>
-              {c.name} <span style={{ color: "#777", fontSize: "0.85rem" }}>({c.kind === "income" ? "przychod" : "wydatek"})</span>
+              {c.name}{" "}
+              <span className="muted">({c.kind === "income" ? "przychod" : "wydatek"})</span>
             </span>
-            <button onClick={() => handleDelete(c)} style={{ fontSize: "0.8rem", padding: "0.2rem 0.5rem" }}>
-              Usun
+            <button className="small" onClick={() => handleDelete(c)}>
+              usun
             </button>
           </li>
         ))}
       </ul>
 
-      <form onSubmit={handleAdd} style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
+      <form onSubmit={handleAdd} className="row">
         <input
           placeholder="Nazwa kategorii"
           value={name}
@@ -86,7 +81,7 @@ export default function CategoryManager({ categories, onChanged }: Props) {
         <button type="submit">Dodaj</button>
       </form>
 
-      {error && <p style={{ color: "#c0392b", fontSize: "0.85rem", marginTop: "0.5rem" }}>{error}</p>}
+      {error && <p className="error">{error}</p>}
     </div>
   );
 }

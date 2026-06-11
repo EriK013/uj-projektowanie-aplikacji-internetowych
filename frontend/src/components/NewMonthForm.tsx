@@ -33,7 +33,7 @@ export default function NewMonthForm({ onCreated }: { onCreated: (m: Month) => v
   }
 
   return (
-    <form onSubmit={handleSubmit} style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
+    <form onSubmit={handleSubmit} className="row">
       <input type="month" value={value} onChange={(e) => setValue(e.target.value)} required />
       <input
         type="number"
@@ -48,7 +48,7 @@ export default function NewMonthForm({ onCreated }: { onCreated: (m: Month) => v
       <button type="button" onClick={() => setOpen(false)}>
         Anuluj
       </button>
-      {error && <span style={{ color: "#c0392b", fontSize: "0.85rem" }}>{error}</span>}
+      {error && <span className="error">{error}</span>}
     </form>
   );
 }

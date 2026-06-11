@@ -25,9 +25,12 @@ export default function Register() {
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: "4rem auto", padding: "0 1rem" }}>
-      <h1>Rejestracja</h1>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem", marginTop: "1rem" }}>
+    <main className="auth">
+      <div className="logo">
+        budzet<span>/</span>app
+      </div>
+      <form onSubmit={handleSubmit}>
+        <h1>Rejestracja</h1>
         <input
           type="email"
           placeholder="Email"
@@ -43,10 +46,12 @@ export default function Register() {
           minLength={6}
           required
         />
-        {error && <p style={{ color: "#c0392b" }}>{error}</p>}
-        <button type="submit">Zarejestruj sie</button>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" className="primary">
+          Zarejestruj sie
+        </button>
       </form>
-      <p style={{ marginTop: "1rem" }}>
+      <p>
         Masz juz konto? <Link to="/login">Zaloguj sie</Link>
       </p>
     </main>

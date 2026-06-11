@@ -23,9 +23,12 @@ export default function Login() {
   }
 
   return (
-    <main style={{ maxWidth: 360, margin: "4rem auto", padding: "0 1rem" }}>
-      <h1>Logowanie</h1>
-      <form onSubmit={handleSubmit} style={{ display: "grid", gap: "0.75rem", marginTop: "1rem" }}>
+    <main className="auth">
+      <div className="logo">
+        budzet<span>/</span>app
+      </div>
+      <form onSubmit={handleSubmit}>
+        <h1>Logowanie</h1>
         <input
           type="email"
           placeholder="Email"
@@ -40,10 +43,12 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        {error && <p style={{ color: "#c0392b" }}>{error}</p>}
-        <button type="submit">Zaloguj</button>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" className="primary">
+          Zaloguj
+        </button>
       </form>
-      <p style={{ marginTop: "1rem" }}>
+      <p>
         Nie masz konta? <Link to="/register">Zarejestruj sie</Link>
       </p>
     </main>

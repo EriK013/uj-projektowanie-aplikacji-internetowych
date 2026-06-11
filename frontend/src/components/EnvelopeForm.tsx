@@ -43,17 +43,7 @@ export default function EnvelopeForm({ monthId, categories, editing, onSaved, on
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      style={{
-        background: "#fff",
-        border: "1px solid #aaa",
-        borderRadius: 8,
-        padding: "0.75rem 1rem",
-        display: "grid",
-        gap: "0.5rem",
-      }}
-    >
+    <form onSubmit={handleSubmit} className="box">
       {editing ? (
         <strong>{editing.name}</strong>
       ) : (
@@ -67,34 +57,34 @@ export default function EnvelopeForm({ monthId, categories, editing, onSaved, on
         </select>
       )}
 
-      <label style={{ fontSize: "0.85rem" }}>
-        Plan (zl)
+      <label className="field">
+        <span className="label">Plan (zl)</span>
         <input
           type="number"
           step="0.01"
           min="0"
           value={planned}
           onChange={(e) => setPlanned(e.target.value)}
-          style={{ width: "100%" }}
         />
       </label>
 
-      <label style={{ fontSize: "0.85rem" }}>
-        {spentLabel}
+      <label className="field">
+        <span className="label">{spentLabel}</span>
         <input
           type="number"
           step="0.01"
           min="0"
           value={spent}
           onChange={(e) => setSpent(e.target.value)}
-          style={{ width: "100%" }}
         />
       </label>
 
-      {error && <span style={{ color: "#c0392b", fontSize: "0.85rem" }}>{error}</span>}
+      {error && <span className="error">{error}</span>}
 
-      <div style={{ display: "flex", gap: "0.5rem" }}>
-        <button type="submit">Zapisz</button>
+      <div className="row">
+        <button type="submit" className="primary">
+          Zapisz
+        </button>
         <button type="button" onClick={onCancel}>
           Anuluj
         </button>

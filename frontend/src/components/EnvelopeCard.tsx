@@ -10,54 +10,35 @@ type Props = {
 export default function EnvelopeCard({ envelope, onEdit, onDelete }: Props) {
   const przekroczone = envelope.pct > 100;
   const szerokosc = Math.min(envelope.pct, 100);
+  const zostalo = Number(envelope.remaining);
 
   return (
-    <div
-      style={{
-        background: "#fff",
-        border: "1px solid #e0e0e0",
-        borderRadius: 8,
-        padding: "0.75rem 1rem",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+    <div className="env">
+      <div className="env-head">
         <strong>{envelope.name}</strong>
         <span>{envelope.pct}%</span>
       </div>
 
-      <div
-        style={{
-          height: 8,
-          background: "#eee",
-          borderRadius: 4,
-          margin: "0.5rem 0",
-          overflow: "hidden",
-        }}
-      >
-        <div
-          style={{
-            width: `${szerokosc}%`,
-            height: "100%",
-            background: przekroczone ? "#c0392b" : "#27ae60",
-          }}
-        />
+      <div className="bar">
+        <div className={przekroczone ? "over" : ""} style={{ width: `${szerokosc}%` }} />
       </div>
 
-      <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.9rem", color: "#555" }}>
-        <span>
+      <div className="env-foot">
+        <span className="kwoty">
           {pln(envelope.spent)} / {pln(envelope.planned)}
         </span>
-        <span style={{ color: Number(envelope.remaining) < 0 ? "#c0392b" : "#555" }}>
-          zostalo {pln(envelope.remaining)}
+        <span className={zostalo < 0 ? "minus" : ""}>
+          {zostalo > 0 ? "+" : ""}
+          {pln(envelope.remaining)}
         </span>
       </div>
 
-      <div style={{ display: "flex", gap: "0.5rem", marginTop: "0.5rem" }}>
-        <button type="button" onClick={onEdit} style={{ fontSize: "0.8rem", padding: "0.25rem 0.5rem" }}>
-          Edytuj
+      <div className="env-actions">
+        <button type="button" className="small" onClick={onEdit}>
+          edytuj
         </button>
-        <button type="button" onClick={onDelete} style={{ fontSize: "0.8rem", padding: "0.25rem 0.5rem" }}>
-          Usun
+        <button type="button" className="small" onClick={onDelete}>
+          usun
         </button>
       </div>
     </div>
