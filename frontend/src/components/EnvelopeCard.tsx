@@ -8,9 +8,14 @@ type Props = {
 };
 
 export default function EnvelopeCard({ envelope, onEdit, onDelete }: Props) {
+  const dochod = envelope.kind === "income";
   const przekroczone = envelope.pct > 100;
   const szerokosc = Math.min(envelope.pct, 100);
   const zostalo = Number(envelope.remaining);
+
+  const barClass = przekroczone ? (dochod ? "good" : "over") : "";
+  const saldo = dochod ? -zostalo : zostalo;
+  const zleSaldo = !dochod && zostalo < 0;
 
   return (
     <div className="env">
@@ -20,16 +25,16 @@ export default function EnvelopeCard({ envelope, onEdit, onDelete }: Props) {
       </div>
 
       <div className="bar">
-        <div className={przekroczone ? "over" : ""} style={{ width: `${szerokosc}%` }} />
+        <div className={barClass} style={{ width: `${szerokosc}%` }} />
       </div>
 
       <div className="env-foot">
         <span className="kwoty">
           {pln(envelope.spent)} / {pln(envelope.planned)}
         </span>
-        <span className={zostalo < 0 ? "minus" : ""}>
-          {zostalo > 0 ? "+" : ""}
-          {pln(envelope.remaining)}
+        <span className={zleSaldo ? "minus" : ""}>
+          {saldo > 0 ? "+" : ""}
+          {pln(String(saldo))}
         </span>
       </div>
 

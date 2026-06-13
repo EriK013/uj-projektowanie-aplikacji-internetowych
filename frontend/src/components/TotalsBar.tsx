@@ -15,7 +15,7 @@ export default function TotalsBar({ totals }: { totals: SummaryTotals }) {
     <div className="totals">
       <Box label="Saldo obecne" value={totals.current_balance} />
       <Box label="Saldo przewidywane" value={totals.predicted_balance} />
-      <Box label="Wolne srodki" value={totals.unallocated} />
+      <Box label="Wynik miesiąca" value={totals.unallocated} />
     </div>
   );
 }

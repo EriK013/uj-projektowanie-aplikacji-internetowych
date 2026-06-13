@@ -7,12 +7,15 @@ import type { Month, MonthSummary, SummaryEnvelope } from "../api/months";
 import { getSummary, listMonths } from "../api/months";
 import { useAuth } from "../auth/AuthContext";
 import CategoryManager from "../components/CategoryManager";
+import DonutChart from "../components/DonutChart";
 import EnvelopeCard from "../components/EnvelopeCard";
 import EnvelopeForm from "../components/EnvelopeForm";
 import NewMonthForm from "../components/NewMonthForm";
 import TotalsBar from "../components/TotalsBar";
 
 type FormState = { mode: "none" } | { mode: "add" } | { mode: "edit"; envelope: SummaryEnvelope };
+
+const VISIBLE_MONTHS = 6;
 
 export default function Home() {
   const { user, logout } = useAuth();
@@ -63,7 +66,7 @@ export default function Home() {
   }
 
   function handleMonthCreated(month: Month) {
-    setMonths((prev) => [month, ...prev]);
+    listMonths().then(setMonths).catch((err) => setError(err.message));
     selectMonth(month.id);
   }
 
@@ -81,6 +84,10 @@ export default function Home() {
     setForm({ mode: "none" });
     refreshSummary();
   }
+
+  const recentMonths = months.slice(0, VISIBLE_MONTHS);
+  const olderMonths = months.slice(VISIBLE_MONTHS);
+  const olderSelected = olderMonths.some((m) => m.id === selectedId);
 
   const income = summary?.envelopes.filter((e) => e.kind === "income") ?? [];
   const expense = summary?.envelopes.filter((e) => e.kind === "expense") ?? [];
@@ -108,7 +115,7 @@ export default function Home() {
         <div className="okres">
           <span className="label">Okres</span>
           <div className="tabs">
-            {months.map((m) => (
+            {recentMonths.map((m) => (
               <button
                 key={m.id}
                 className={m.id === selectedId ? "active" : ""}
@@ -118,6 +125,22 @@ export default function Home() {
               </button>
             ))}
           </div>
+          {olderMonths.length > 0 && (
+            <select
+              className={olderSelected ? "active" : ""}
+              value={olderSelected ? String(selectedId) : ""}
+              onChange={(e) => selectMonth(Number(e.target.value))}
+            >
+              <option value="" disabled>
+                starsze
+              </option>
+              {olderMonths.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.label}
+                </option>
+              ))}
+            </select>
+          )}
           <NewMonthForm onCreated={handleMonthCreated} />
           <CategoryManager categories={categories} onChanged={refreshCategories} />
           <span className="spacer" />
@@ -165,6 +188,23 @@ export default function Home() {
                 </div>
                 {expense.length === 0 && <p className="muted">Brak kopert wydatkow.</p>}
                 {expense.map((e) => renderEnvelope(e))}
+              </section>
+            </div>
+
+            <div className="panel charts">
+              <section>
+                <DonutChart
+                  title="Przychody / kategoria"
+                  caption="wplyw"
+                  slices={income.map((e) => ({ label: e.name, value: Number(e.spent) }))}
+                />
+              </section>
+              <section>
+                <DonutChart
+                  title="Wydatki / kategoria"
+                  caption="wydano"
+                  slices={expense.map((e) => ({ label: e.name, value: Number(e.spent) }))}
+                />
               </section>
             </div>
           </>

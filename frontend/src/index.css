@@ -175,6 +175,12 @@ a {
   color: #fff;
 }
 
+.okres select.active {
+  background: #18181b;
+  border-color: #18181b;
+  color: #fff;
+}
+
 .panel {
   background: #fff;
   border: 1px solid #18181b;
@@ -201,6 +207,72 @@ a {
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 1rem;
+}
+
+.panel.charts {
+  border-top: 1px solid #18181b;
+  margin-top: -1px;
+}
+
+.chart-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.donut {
+  width: 168px;
+  height: 168px;
+  flex-shrink: 0;
+}
+
+.donut-total {
+  text-anchor: middle;
+  font-size: 11px;
+  font-weight: 700;
+  fill: #18181b;
+}
+
+.donut-caption {
+  text-anchor: middle;
+  font-size: 5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  fill: #6e6e74;
+}
+
+.legend {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 0.4rem;
+  min-width: 160px;
+}
+
+.legend li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend .dot {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+}
+
+.seg0 { stroke: #1652d4; background: #1652d4; }
+.seg1 { stroke: #102a6b; background: #102a6b; }
+.seg2 { stroke: #6e6e74; background: #6e6e74; }
+.seg3 { stroke: #8aa6e6; background: #8aa6e6; }
+.seg4 { stroke: #b9b9be; background: #b9b9be; }
+.seg5 { stroke: #3f6fd6; background: #3f6fd6; }
+
+.legend-name {
+  flex: 1;
 }
 
 .env {
@@ -235,6 +307,10 @@ a {
 
 .bar > div.over {
   background: #c0392b;
+}
+
+.bar > div.good {
+  background: #1e8449;
 }
 
 .env-foot {
