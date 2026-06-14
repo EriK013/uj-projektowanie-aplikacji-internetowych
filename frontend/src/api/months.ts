@@ -19,6 +19,7 @@ export type SummaryTotals = {
 
 export type SummaryEnvelope = {
   id: number;
+  category_id: number;
   name: string;
   kind: "income" | "expense";
   planned: string;

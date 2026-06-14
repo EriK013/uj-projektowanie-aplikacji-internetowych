@@ -43,12 +43,32 @@ export async function request<T>(path: string, options: Options = {}): Promise<T
   });
 
   if (!res.ok) {
-    const detail = await res.json().catch(() => null);
-    throw new Error(detail?.detail ?? "Wystapil blad");
+    if (res.status === 401 && token) {
+      clearToken();
+      window.location.assign("/login");
+    }
+    const data = await res.json().catch(() => null);
+    throw new Error(parseError(data));
   }
 
   if (res.status === 204) {
     return undefined as T;
   }
   return res.json();
+}
+
+function parseError(data: unknown): string {
+  const detail = (data as { detail?: unknown } | null)?.detail;
+  if (typeof detail === "string") {
+    return detail;
+  }
+  if (Array.isArray(detail)) {
+    const messages = detail
+      .map((item) => (item as { msg?: string }).msg)
+      .filter(Boolean);
+    if (messages.length > 0) {
+      return messages.join("; ");
+    }
+  }
+  return "Wystapil blad";
 }

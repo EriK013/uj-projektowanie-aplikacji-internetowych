@@ -39,7 +39,7 @@ export default function DonutChart({
 
           <ul className="legend">
             {data.map((s, i) => (
-              <li key={s.label}>
+              <li key={i}>
                 <span className={`dot seg${i % SEGMENTS}`} />
                 <span className="legend-name">{s.label}</span>
                 <span className="muted">{((s.value / total) * 100).toFixed(1)}%</span>
@@ -67,7 +67,7 @@ function drawSegments(data: Slice[], total: number) {
     const len = (s.value / total) * CIRC;
     const seg = (
       <circle
-        key={s.label}
+        key={i}
         className={`seg${i % SEGMENTS}`}
         cx="50"
         cy="50"

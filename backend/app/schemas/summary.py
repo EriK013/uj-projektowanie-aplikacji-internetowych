@@ -17,6 +17,7 @@ class SummaryTotals(BaseModel):
 
 class SummaryEnvelope(BaseModel):
     id: int
+    category_id: int
     name: str
     kind: str
     planned: Decimal

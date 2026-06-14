@@ -28,6 +28,11 @@ def create_category(
     db: Session = Depends(get_db),
     current_user: models.User = Depends(get_current_user),
 ):
+    if _name_taken(db, current_user.id, data.name):
+        raise HTTPException(
+            status.HTTP_409_CONFLICT, "Kategoria o tej nazwie juz istnieje"
+        )
+
     category = models.Category(
         user_id=current_user.id, name=data.name, kind=data.kind
     )
@@ -45,6 +50,10 @@ def update_category(
     current_user: models.User = Depends(get_current_user),
 ):
     category = _get_owned(db, category_id, current_user.id)
+    if _name_taken(db, current_user.id, data.name, exclude_id=category.id):
+        raise HTTPException(
+            status.HTTP_409_CONFLICT, "Kategoria o tej nazwie juz istnieje"
+        )
     category.name = data.name
     db.commit()
     db.refresh(category)
@@ -72,6 +81,18 @@ def delete_category(
 
     db.delete(category)
     db.commit()
+
+
+def _name_taken(
+    db: Session, user_id: int, name: str, exclude_id: int | None = None
+) -> bool:
+    query = db.query(models.Category).filter(
+        models.Category.user_id == user_id,
+        models.Category.name == name,
+    )
+    if exclude_id is not None:
+        query = query.filter(models.Category.id != exclude_id)
+    return query.first() is not None
 
 
 def _get_owned(db: Session, category_id: int, user_id: int) -> models.Category:

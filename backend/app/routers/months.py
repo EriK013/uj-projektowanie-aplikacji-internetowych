@@ -93,6 +93,7 @@ def month_summary(
         envelopes.append(
             SummaryEnvelope(
                 id=envelope.id,
+                category_id=envelope.category_id,
                 name=category.name,
                 kind=category.kind,
                 planned=envelope.planned,

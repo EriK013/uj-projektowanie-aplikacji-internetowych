@@ -60,6 +60,7 @@ export default function Home() {
   }
 
   function selectMonth(id: number) {
+    if (id === selectedId) return;
     setSummary(null);
     setForm({ mode: "none" });
     setSelectedId(id);
@@ -92,8 +93,8 @@ export default function Home() {
   const income = summary?.envelopes.filter((e) => e.kind === "income") ?? [];
   const expense = summary?.envelopes.filter((e) => e.kind === "expense") ?? [];
 
-  const usedCategoryNames = new Set(summary?.envelopes.map((e) => e.name) ?? []);
-  const availableCategories = categories.filter((c) => !usedCategoryNames.has(c.name));
+  const usedCategoryIds = new Set(summary?.envelopes.map((e) => e.category_id) ?? []);
+  const availableCategories = categories.filter((c) => !usedCategoryIds.has(c.id));
 
   return (
     <>
