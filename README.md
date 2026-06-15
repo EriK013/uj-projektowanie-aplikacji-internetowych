@@ -2,6 +2,8 @@
 
 Aplikacja do planowania budżetu metodą kopertową. 
 
+<img width="1915" height="902" alt="image" src="https://github.com/user-attachments/assets/990e40d3-c671-4763-9583-fe87591fece9" />
+
 ## Technologie
 
 - Backend: FastAPI, SQLAlchemy, Alembic, PostgreSQL
